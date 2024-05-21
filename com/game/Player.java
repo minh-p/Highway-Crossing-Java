@@ -1,4 +1,5 @@
-import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 public class Player
 {
@@ -10,9 +11,10 @@ public class Player
         this.y = y;
     }
     
-    public void updateLocation(Graphics graphics)
+    public void updateLocation(Graphics2D graphics)
     {
-        graphics.draw3DRect(x, y, 50, 50, true);
+        graphics.setColor(new Color(0, 0, 0));
+        graphics.drawRect(50, 50, 50, 50);
         x += 1;
     }
 }

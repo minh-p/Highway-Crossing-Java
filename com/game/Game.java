@@ -1,71 +1,88 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import javax.swing.JFrame;
-import javax.swing.SwingWorker;
+import javax.swing.JPanel;
 
-public class Game extends JFrame
+public class Game extends JPanel implements Runnable
 {
-    private Player player;
-    private final SwingWorker gameLooper;
-    private boolean stop;
-    private final int sizeX = 800;
-    private final int sizeY = 600;
-    public final long FPS = 10;
-    
-    private long seconds;
-    
-    public Game()
-    {       
-        this.player = new Player(200, 400);
-        setSize(this.sizeX, this.sizeY);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        seconds = 0;
-        stop = false;
-        
-        this.gameLooper = new SwingWorker()
-        {
-            @Override
-            protected Object doInBackground() throws Exception
-            {
-                // while (!stop)
-                // {
-                //     update();
-                //     repaint();
-                //     Thread.sleep(200);
-                // }
-                
-                long lastFrameTime = System.currentTimeMillis();
-                long elapsedTime = 0;
-                while (!stop)
-                {
-                    long currentFrameTime = System.currentTimeMillis();
-                    elapsedTime += (currentFrameTime - lastFrameTime);
-                    if (elapsedTime >= 1)
-                    {
-                        update(elapsedTime);
-                        repaint();
-                        elapsedTime--;
-                    }
-                    lastFrameTime = currentFrameTime;
-                }
-                return null;
-            }
-        };
-        this.gameLooper.execute();
+    public static final int FRAME_WIDTH = 1024;
+    public static final int FRAME_HEIGHT = 1024;
+    private Thread tl;
+    private boolean running;
+    private double seconds = 0;
+    private final int FPS = 10;
+
+    public static void main(String[] args)
+    {
+        JFrame frame = new JFrame("HighWay Crossing");
+        frame.setSize(Game.FRAME_WIDTH, Game.FRAME_HEIGHT);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setBackground(Color.WHITE);
+        frame.setLayout(new BorderLayout());
     }
-    
+
+    public synchronized void start()
+    {
+        running = true;
+        tl = new Thread(this);
+        tl.start();
+    }
+
+    public synchronized void stop()
+    {
+        running = false;
+        try {
+            tl.join();
+            System.out.println("The game stopped");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
-    public void paint(Graphics graphics)
+    public void run()
     {
-        super.paint(graphics);
-        getGraphics().setColor(Color.black);
-        graphics.drawString("second: " + seconds, 200, 200);
-        this.player.updateLocation(graphics);
+        double lastF = System.nanoTime();
+        double elapsedTime = 0;
+        while (running)
+        {
+            double currentF = System.nanoTime();
+            elapsedTime += (currentF - lastF) / (1000000000/FPS);
+            lastF = currentF;
+            System.out.println(elapsedTime);
+            if (elapsedTime >= 1)
+            {
+                load();
+                System.out.println("The game runs");
+                repaint();
+                elapsedTime--;
+            }
+        }
     }
-    
-    public void update(long elapsedTime) // ONLY FOR GAME LOGIC NOT UI
+
+    public Game()
     {
-        seconds += elapsedTime;
+        setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
+        setFocusable(true);
+        requestFocus();
+        // addKeyListener(this);
+    }
+
+    @Override
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.BLACK);
+    }
+
+    // Load Images in memory
+    public void load()
+    {
+        return;
     }
 }
