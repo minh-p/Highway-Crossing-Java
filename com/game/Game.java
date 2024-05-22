@@ -1,9 +1,7 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Game extends JPanel implements Runnable
@@ -13,17 +11,8 @@ public class Game extends JPanel implements Runnable
     private Thread tl;
     private boolean running;
     private double seconds = 0;
-    private final int FPS = 10;
-
-    public static void main(String[] args)
-    {
-        JFrame frame = new JFrame("HighWay Crossing");
-        frame.setSize(Game.FRAME_WIDTH, Game.FRAME_HEIGHT);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.WHITE);
-        frame.setLayout(new BorderLayout());
-    }
+    private Player player;
+    private final int FPS = 60;
 
     public synchronized void start()
     {
@@ -46,18 +35,17 @@ public class Game extends JPanel implements Runnable
     @Override
     public void run()
     {
-        double lastF = System.nanoTime();
+        long lastF = System.nanoTime();
         double elapsedTime = 0;
+        long currentF;
         while (running)
         {
-            double currentF = System.nanoTime();
-            elapsedTime += (currentF - lastF) / (1000000000/FPS);
+            currentF = System.nanoTime();
+            elapsedTime += (currentF - lastF) / ((double) (1000000000/FPS));
             lastF = currentF;
-            System.out.println(elapsedTime);
             if (elapsedTime >= 1)
             {
-                load();
-                System.out.println("The game runs");
+                update(elapsedTime);
                 repaint();
                 elapsedTime--;
             }
@@ -69,6 +57,7 @@ public class Game extends JPanel implements Runnable
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setFocusable(true);
         requestFocus();
+        this.player = new Player(0, 0);
         // addKeyListener(this);
     }
 
@@ -78,11 +67,12 @@ public class Game extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.BLACK);
+        this.player.updateLocation(g2d);
     }
 
-    // Load Images in memory
-    public void load()
+    public void update(double elapsedTime)
     {
-        return;
+        seconds += elapsedTime/100;
+        System.out.println(seconds);
     }
 }

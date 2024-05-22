@@ -15,6 +15,6 @@ public class Player
     {
         graphics.setColor(new Color(0, 0, 0));
         graphics.drawRect(50, 50, 50, 50);
-        x += 1;
+        System.out.println("hello");
     }
 }
