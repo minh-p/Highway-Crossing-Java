@@ -10,7 +10,7 @@ public class Game extends JPanel implements Runnable
     public static final int FRAME_HEIGHT = 1024;
     private Thread tl;
     private boolean running;
-    private double seconds = 0;
+    private double second = 0;
     private Player player;
     private final int FPS = 60;
 
@@ -26,7 +26,6 @@ public class Game extends JPanel implements Runnable
         running = false;
         try {
             tl.join();
-            System.out.println("The game stopped");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -52,12 +51,12 @@ public class Game extends JPanel implements Runnable
         }
     }
 
-    public Game()
+    public Game(int FRAME_WIDTH, int FRAME_HEIGHT)
     {
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setFocusable(true);
         requestFocus();
-        this.player = new Player(0, 0);
+        this.player = new Player(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
         // addKeyListener(this);
     }
 
@@ -67,12 +66,11 @@ public class Game extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.BLACK);
-        this.player.updateLocation(g2d);
+        this.player.updateLocation(g2d, this.second);
     }
 
     public void update(double elapsedTime)
     {
-        seconds += elapsedTime/100;
-        System.out.println(seconds);
+        this.second += elapsedTime/100;
     }
 }
