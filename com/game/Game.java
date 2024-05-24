@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
@@ -7,13 +8,11 @@ import java.util.ArrayList;
 
 public class Game extends JPanel implements Runnable
 {
-    public static final int FRAME_WIDTH = 1024;
-    public static final int FRAME_HEIGHT = 1024;
     private Thread tl;
     private boolean running;
     private double second = 0;
     private Player player;
-    private final int FPS = 30;
+    private final int FPS = 60;
     private final KeyHandler keyH;
     private ArrayList<Car> cars;
 
@@ -63,7 +62,7 @@ public class Game extends JPanel implements Runnable
         keyH = new KeyHandler();
         addKeyListener(keyH);
         cars = new ArrayList<Car>();
-        Car.generateCars(cars, 5, 50, 50, FRAME_WIDTH, FRAME_HEIGHT, 20);
+        Car.generateCars(cars, 5, 50, 50, FRAME_WIDTH, FRAME_HEIGHT, 20, 10);
     }
 
     @Override
@@ -75,6 +74,15 @@ public class Game extends JPanel implements Runnable
         this.player.updateLocation(g2d);
         handleCars(g2d);
         evaluteCollision();
+        updateSecond(g2d);
+    }
+
+    private void updateSecond(Graphics2D graphics)
+    {
+        graphics.setFont(new Font("Arial", Font.BOLD, 20));
+        graphics.drawString("Mad Man On the Interstate Highway! Time Elapsed: " + (int) (this.second) + " seconds", 20, 20);
+        graphics.drawString("Made by Vu Huy Minh Pham. ", 20, this.player.getPlainY()-100);
+        graphics.drawString("(@hmp.dev/github:minh-p/vhuyminp@gmail.com/minhisverynormal@gmail.com)", 20, this.player.getPlainY()-50);
     }
 
     public void evaluteCollision()

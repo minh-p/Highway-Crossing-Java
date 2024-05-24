@@ -11,9 +11,9 @@ public class Car extends Sprite implements MovingSprite
     public int maxSpeed;
     private BufferedImage image;
 
-    public Car(int x, int y, int width, int height, int plainX, int plainY, int maxSpeed)
+    public Car(int x, int y, int width, int height, int plainX, int plainY, int maxSpeed, int minSpeed)
     {
-        super(x, y, width, height, plainX, plainY, (int) (Math.random() * maxSpeed + 1));
+        super(x, y, width, height, plainX, plainY, Math.min((int) (Math.random() * maxSpeed), minSpeed));
         this.maxSpeed = maxSpeed;
         this.setVelocityX(-this.getSpeed());
         try {
@@ -38,25 +38,26 @@ public class Car extends Sprite implements MovingSprite
     {
         if (this.getX() < 0)
         {
-            this.setY((int) (Math.random() * this.getPlainY()));
+            this.setY((int) (Math.random()*(this.getPlainY()-2) + 2));
             this.setX(this.getPlainX());
-            this.setVelocityX(-((int) (Math.random() * this.maxSpeed)));
+            this.setVelocityX(-((int) (Math.random() * this.maxSpeed) + 1));
         }
     }
 
-    public static void generateCars(ArrayList<Car> cars, int amount, int width, int height, int plainX, int plainY, int maxSpeed)
+    public static void generateCars(ArrayList<Car> cars, int amount, int width, int height, int plainX, int plainY, int maxSpeed, int minSpeed)
     {
         while (amount >= 0)
         {
             cars.add(
                 new Car(
                     plainX,
-                    (int) (Math.random()*plainY),
+                    (int) (Math.random()*(plainY-2) + 2),
                     width,
                     height,
                     plainX,
                     plainY,
-                    (int) (Math.random() * maxSpeed)
+                    maxSpeed,
+                    minSpeed
                     )
                     );
             amount--;
