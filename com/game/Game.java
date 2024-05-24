@@ -12,7 +12,8 @@ public class Game extends JPanel implements Runnable
     private boolean running;
     private double second = 0;
     private Player player;
-    private final int FPS = 60;
+    private final int FPS = 30;
+    private final KeyHandler keyH;
 
     public synchronized void start()
     {
@@ -56,8 +57,9 @@ public class Game extends JPanel implements Runnable
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setFocusable(true);
         requestFocus();
-        this.player = new Player(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
-        // addKeyListener(this);
+        this.player = new Player(0, 0, FRAME_WIDTH, FRAME_HEIGHT, 4);
+        keyH = new KeyHandler();
+        addKeyListener(keyH);
     }
 
     @Override
@@ -72,5 +74,31 @@ public class Game extends JPanel implements Runnable
     public void update(double elapsedTime)
     {
         this.second += elapsedTime/100;
+        int speed = player.getSpeed();
+        if (keyH.upPressed)
+        {
+            this.player.setVelocityY(-speed);
+        }
+        else if (keyH.downPressed)
+        {
+            this.player.setVelocityY(speed);
+        }
+        else
+        {
+            this.player.setVelocityY(0);
+        }
+
+        if (keyH.rightPressed)
+        {
+            this.player.setVelocityX(speed);
+        }
+        else if (keyH.leftPressed)
+        {
+            this.player.setVelocityX(-speed);
+        }
+        else
+        {
+            this.player.setVelocityX(0);
+        }
     }
 }
