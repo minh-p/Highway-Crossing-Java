@@ -1,3 +1,15 @@
 #!/bin/sh
 
-javac ./com/game/Main.java -d ./bin
+rm -r bin
+rm -r jar
+
+mkdir bin
+mkdir jar
+
+javac -d bin -classpath com/game com/game/Main.java
+cp -r assets bin
+cd bin
+jar -cvf HighwayCrossing.jar .
+mv HighwayCrossing.jar ../jar
+
+echo REMEMBER TO SET Main-Class in MANIFEST.MF in Jar File!!!!!!
