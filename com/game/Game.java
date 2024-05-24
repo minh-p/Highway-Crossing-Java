@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import java.util.ArrayList;
 
 public class Game extends JPanel implements Runnable
 {
@@ -14,6 +15,7 @@ public class Game extends JPanel implements Runnable
     private Player player;
     private final int FPS = 30;
     private final KeyHandler keyH;
+    private ArrayList<Car> cars;
 
     public synchronized void start()
     {
@@ -60,6 +62,8 @@ public class Game extends JPanel implements Runnable
         this.player = new Player(0, 0, FRAME_WIDTH, FRAME_HEIGHT, 4);
         keyH = new KeyHandler();
         addKeyListener(keyH);
+        cars = new ArrayList<Car>();
+        Car.generateCars(cars, 5, FRAME_WIDTH, FRAME_HEIGHT, 20);
     }
 
     @Override
@@ -68,12 +72,12 @@ public class Game extends JPanel implements Runnable
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.BLACK);
-        this.player.updateLocation(g2d, this.second);
+        this.player.updateLocation(g2d);
+        handleCars(g2d);
     }
 
-    public void update(double elapsedTime)
+    private void handlePlayerInput()
     {
-        this.second += elapsedTime/100;
         int speed = player.getSpeed();
         if (keyH.upPressed)
         {
@@ -100,5 +104,19 @@ public class Game extends JPanel implements Runnable
         {
             this.player.setVelocityX(0);
         }
+    }
+
+    private void handleCars(Graphics2D graphics)
+    {
+        for (Car car : this.cars)
+        {
+            car.updateLocation(graphics);
+        }
+    }
+
+    public void update(double elapsedTime)
+    {
+        this.second += elapsedTime/100;
+        handlePlayerInput();
     }
 }

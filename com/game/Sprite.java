@@ -33,7 +33,17 @@ public class Sprite
         return y;
     }
 
-    public void velocitize(Graphics2D graphics, double second)
+    public int getPlainX()
+    {
+        return this.plainX;
+    }
+
+    public int getPlainY()
+    {
+        return this.plainY;
+    }
+
+    public void velocitize(Graphics2D graphics)
     {
         this.x += this.velocityX;
         this.y += this.velocityY;
@@ -68,5 +78,15 @@ public class Sprite
     public void setVelocityY(int velocityY)
     {
         this.velocityY = velocityY;
+    }
+
+    public void setY(int y)
+    {
+        this.y = y;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
     }
 }

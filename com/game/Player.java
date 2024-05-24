@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class Player extends Sprite
+public class Player extends Sprite implements MovingSprite
 {
     private final int width = 50;
     private final int height = 50;
@@ -24,7 +24,7 @@ public class Player extends Sprite
         }
     }
 
-    public void drawPlayerSprite(Graphics2D graphics)
+    public void drawSprite(Graphics2D graphics)
     {
         BufferedImage image = imageRight;
         if (isLeft) image = imageLeft;
@@ -44,11 +44,11 @@ public class Player extends Sprite
         }
     }
 
-    public void updateLocation(Graphics2D graphics, double second)
+    public void updateLocation(Graphics2D graphics)
     {
         graphics.setColor(new Color(0, 0, 0));
-        velocitize(graphics, second);
+        velocitize(graphics);
         capPlain();
-        drawPlayerSprite(graphics);
+        drawSprite(graphics);
     }
 }
