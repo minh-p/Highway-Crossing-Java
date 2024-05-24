@@ -9,13 +9,28 @@ public class Sprite
     private final int plainX;
     private final int plainY;
     private final int speed;
-    public Sprite(int x, int y, int plainX, int plainY, int speed)
+    private int width;
+    private int height;
+
+    public Sprite(int x, int y, int width, int height, int plainX, int plainY, int speed)
     {
         this.x = x;
         this.y = y;
         this.plainX = plainX;
         this.plainY = plainY;
         this.speed = speed;
+        this.width = width;
+        this.height = height;
+    }
+
+    public int getWidth()
+    {
+        return this.width;
+    }
+
+    public int getHeight()
+    {
+        return this.height;
     }
 
     public int getSpeed()

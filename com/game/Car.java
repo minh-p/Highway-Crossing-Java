@@ -8,14 +8,12 @@ import java.util.ArrayList;
 
 public class Car extends Sprite implements MovingSprite
 {
-    public final int width = 50;
-    public final int height = 50;
     public int maxSpeed;
     private BufferedImage image;
 
-    public Car(int x, int y, int plainX, int plainY, int maxSpeed)
+    public Car(int x, int y, int width, int height, int plainX, int plainY, int maxSpeed)
     {
-        super(x, y, plainX, plainY, (int) (Math.random() * maxSpeed));
+        super(x, y, width, height, plainX, plainY, (int) (Math.random() * maxSpeed + 1));
         this.maxSpeed = maxSpeed;
         this.setVelocityX(-this.getSpeed());
         try {
@@ -33,7 +31,7 @@ public class Car extends Sprite implements MovingSprite
     }
 
     public void drawSprite(Graphics2D graphics) {
-        graphics.drawImage(image, getX(), getY(), this.width, this.height, null);
+        graphics.drawImage(image, getX(), getY(), this.getWidth(), this.getHeight(), null);
     }
 
     public void capPlain()
@@ -46,7 +44,7 @@ public class Car extends Sprite implements MovingSprite
         }
     }
 
-    public static void generateCars(ArrayList<Car> cars, int amount, int plainX, int plainY, int maxSpeed)
+    public static void generateCars(ArrayList<Car> cars, int amount, int width, int height, int plainX, int plainY, int maxSpeed)
     {
         while (amount >= 0)
         {
@@ -54,6 +52,8 @@ public class Car extends Sprite implements MovingSprite
                 new Car(
                     plainX,
                     (int) (Math.random()*plainY),
+                    width,
+                    height,
                     plainX,
                     plainY,
                     (int) (Math.random() * maxSpeed)

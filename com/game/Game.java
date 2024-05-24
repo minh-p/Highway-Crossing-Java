@@ -59,11 +59,11 @@ public class Game extends JPanel implements Runnable
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setFocusable(true);
         requestFocus();
-        this.player = new Player(0, 0, FRAME_WIDTH, FRAME_HEIGHT, 4);
+        this.player = new Player(0, 0, 50, 50, FRAME_WIDTH, FRAME_HEIGHT, 4);
         keyH = new KeyHandler();
         addKeyListener(keyH);
         cars = new ArrayList<Car>();
-        Car.generateCars(cars, 5, FRAME_WIDTH, FRAME_HEIGHT, 20);
+        Car.generateCars(cars, 5, 50, 50, FRAME_WIDTH, FRAME_HEIGHT, 20);
     }
 
     @Override
@@ -74,6 +74,23 @@ public class Game extends JPanel implements Runnable
         g2d.setColor(Color.BLACK);
         this.player.updateLocation(g2d);
         handleCars(g2d);
+        evaluteCollision();
+    }
+
+    public void evaluteCollision()
+    {
+        for (Car car : this.cars)
+        {
+            int topX = car.getX() - car.getWidth() / 2;
+            int bottomX = car.getX() + car.getWidth() / 2;
+            int topY = car.getY() - car.getWidth() / 2;
+            int bottomY = car.getY() + car.getWidth() / 2;
+
+            if (player.getX() >= topX && player.getX() <= bottomX && player.getY() <= bottomY && player.getY() >= topY)
+            {
+                running = false;
+            }
+        }
     }
 
     private void handlePlayerInput()

@@ -12,9 +12,9 @@ public class Player extends Sprite implements MovingSprite
     private boolean isLeft;
     private BufferedImage imageRight, imageLeft;
 
-    public Player(int x, int y, int plainX, int plainY, int speed)
+    public Player(int x, int y, int width, int height, int plainX, int plainY, int speed)
     {
-        super(x, y, plainX, plainY, speed);
+        super(x, y, width, height, plainX, plainY, speed);
 
         try {
             imageRight = ImageIO.read(new File("assets/player.png"));
